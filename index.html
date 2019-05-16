@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LLH Trading</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Archivo+Black|Roboto:200" rel="stylesheet">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
+</head>
+<body>
+	<main>
+		<header>
+			<nav>
+				<img id="logo" src="img/logo.png"></img>
+				<input type="search" name="search" id="searchbar" placeholder="Type a song name">
+			</nav>
+		</header>
+		<section id="searchList">
+			<ul></ul>
+		</section>
+	</main>
+</body>
+	<style type="text/css">
+		nav{
+			background: rgb(255,247,96);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 100px;
+			position: fixed;
+			width: 100%;
+			top: 0;
+		}
+		#searchbar{
+			margin: 1em;
+		    height: 50px;
+		    padding: .5em 1em;
+			font-family: 'Roboto', sans-serif;
+			font-weight: 200;
+		}
+		#logo{
+			width: 100px;
+			height: auto;
+		}
+		#searchList ul {
+			margin: 100px 0;
+			padding: 0;
+		}
+		#searchList ul li{
+			display:flex;
+			justify-content: space-between;
+		}
+		#searchList ul li div{
+			display: flex;
+			flex-direction: column; 
+			padding: 2em;
+			width: 100%;
+		}
+		#searchList ul li div h1.title{
+			font-family: 'Archivo Black', sans-serif;
+			font-size: 1.2em;
+		}
+		#searchList ul li div p.description{
+			font-family: 'Roboto', sans-serif;
+			font-weight: 200;
+		}
+		#searchList ul li img.thumbnail{
+			height: 200px;
+    		min-width: 300px;
+		}
+		#searchList ul li img.qrcode{
+			height: 100px;
+    		min-width: 100px;
+    		margin: 1em;
+		}
+	</style>
+	<script type="text/javascript">
+		$('#searchbar').on('keyup', function(e){
+			var term = e.target.value
+			console.log(term)
+			fetchVideo(term)
+		})
+
+		function fetchVideo(q){
+			var youtube_search_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + q + "&key=AIzaSyD0Elq-0x9vOcKhA0qYrBI3qWf4IhxKPNU&maxResults=5"
+			$('#searchList ul').html('')
+			$.ajax({
+				url: youtube_search_url,
+				success: function(data){
+					searchResult = data.items
+					_.each(searchResult, function(item){
+						var title = item.snippet.title
+						var description = item.snippet.description
+						var videoId = item.id.videoId
+						var thumbnail = "https://img.youtube.com/vi/" + videoId + "/0.jpg"
+						var url = "http://www.youtube.com/watch?v=" + videoId
+						$('#searchList ul').append('<li data-videoId=' + videoId + '>' +
+							"<a target='_blank' href='" + url + "' ><img class='thumbnail' src=" + thumbnail + "></a>" +
+							"<div>" + 
+							"<h1 class='title'>" + title + "</h1>" + 
+							"<p class='description'>" + description + "</p>" + 
+							"</div>" +
+							"<img class='qrcode' src='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + url + "'/>" +
+						'</li>')
+					})
+				}
+			})
+		}
+
+	</script>
+</html>
