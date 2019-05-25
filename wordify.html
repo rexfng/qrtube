@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>LLH Wordify</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Black|Roboto:200" rel="stylesheet">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
+	</head>
+	<body>
+		<main>
+			<header>
+				<nav>
+<!-- 					<img id="logo" src="img/logo.png"></img>
+ -->					
+ <input type="search" name="search" id="searchbar" placeholder="Type a word">
+				</nav>
+			</header>
+			<section id="searchList">
+				<ul></ul>
+			</section>
+			<div id="button">Button</div>
+		</main>
+	</body>
+	<style type="text/css">
+		#searchbar{
+			padding: .5em 1em;
+			margin: 1em;
+		}
+		#button{
+			padding: 1em;
+			background: blue;
+		}
+	</style>
+	<script type="text/javascript">
+		$('#searchbar').on('keyup', function(e){
+			var term = e.target.value
+			var url = "https://api.datamuse.com/words?ml=" + term
+			console.log(term)
+			$.ajax({
+				url: url,
+				success: function(vocabs){
+					console.log(vocabs)
+					$('#searchList ul').html("")
+					_.each(vocabs, function(vocab){
+						console.log(vocab.word)
+						$('#searchList ul').append("<li>" + vocab.word + "</li>")
+
+					})
+				}
+			})
+		})
+		$('#button').on('click', function(){
+			console.log('I was clicked')
+		})
+	</script>
+</html>

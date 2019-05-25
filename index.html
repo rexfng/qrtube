@@ -77,18 +77,18 @@
 	</style>
 	<script type="text/javascript">
 		$('#searchbar').on('keyup', function(e){
-			var term = e.target.value
-			console.log(term)
-			fetchVideo(term)
+			var q = e.target.value
+			// console.log(q)
+			fetchVideo(q)
 		})
 
 		function fetchVideo(q){
 			var youtube_search_url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + q + "&key=AIzaSyD0Elq-0x9vOcKhA0qYrBI3qWf4IhxKPNU&maxResults=5"
-			$('#searchList ul').html('')
 			$.ajax({
 				url: youtube_search_url,
 				success: function(data){
-					searchResult = data.items
+					$('#searchList ul').html('')	
+					var searchResult = data.items
 					_.each(searchResult, function(item){
 						var title = item.snippet.title
 						var description = item.snippet.description
